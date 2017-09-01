@@ -1,8 +1,38 @@
-import React from 'react';
-import cx from '../utils/classnames';
-import { props, skinnable, t, ReactChildren, stateClassUtil } from '../utils';
+import * as React from 'react';
+import * as cx from '../utils/classnames';
+import { props, t, ReactChildren, stateClassUtil } from '../utils';
 import FormattedText from '../FormattedText/FormattedText';
 import Popover from '../Popover/Popover';
+import { ObjectOverwrite } from 'typelevel-ts';
+
+import { PopoverProps } from '../Popover/Popover';
+
+export namespace TooltipProps {
+  type Type = 'light' | 'dark';
+  type Size = 'small' | 'big';
+}
+
+export type TooltipProps = {
+  /** the element over which the tooltip is shown */
+  children: any, // TODO: t.ReactChildren
+  /** popover props */
+  popover: ObjectOverwrite<PopoverProps.Popover, {
+    children?: undefined,
+    content: string,
+    event?: undefined
+  }>,
+  /** type - light | dark */
+  type?: TooltipProps.Type,
+  /** size - small | big */
+  size?: TooltipProps.Size,
+  /** add class name */
+  className?: string,
+  /** add id */
+  id?: string,
+  /** add custom css style */
+  style?: React.CSSProperties
+}
+
 
 export const Props = {
   children: ReactChildren,
@@ -14,15 +44,8 @@ export const Props = {
   style: t.maybe(t.Object)
 };
 
-/** Tooltip that appears when the mouse is over an element
- * @param children - the element over which the tooltip is shown
- * @param popover - popover props
- * @param type - light | dark
- * @param size - small | big
- */
-@skinnable()
 @props(Props)
-export default class Tooltip extends React.PureComponent {
+export default class Tooltip extends React.PureComponent<TooltipProps> {
 
   static defaultProps = {
     type: 'dark',
